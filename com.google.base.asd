@@ -44,4 +44,5 @@
    (:file "defconst" :depends-on ("package" "optimize"))
    (:file "error" :depends-on ("package" "optimize"))
    (:file "type" :depends-on ("package" "optimize" "defconst"))
-   (:file "octet" :depends-on ("package" "optimize" "type"))))
+   (:file "octet" :depends-on ("package" "optimize" "type"))
+   (:file "sequence" :depends-on ("package" "optimize"))))

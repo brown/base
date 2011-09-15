@@ -48,6 +48,9 @@ DEFPACKAGE form.")
   ;; optimize.lisp
   (:export #:*optimize-default*
            #:*optimize-fast-unsafe*)
+  ;; sequence.lisp
+  (:export #:prefixp
+           #:suffixp)
   ;; type.lisp
   (:export #:int32
            #:int64

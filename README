@@ -1,2 +1,12 @@
 
 Universally useful Lisp code that lives in package com.google.base.
+
+The intent is that the base package only contains code that's highly likely to
+be useful in every Lisp application.  Currently it contains:
+
+    a nicer version of defconstant
+    a missing-argument function for use in defclass forms
+    functions for manipulating utf-8 strings stored as vectors of 8-bit octets
+    common compiler optimization settings
+    functions for extracting the prefix or suffix of a sequence
+    Lisp type definitions for common C integer types

@@ -31,12 +31,18 @@
 (in-package #:common-lisp-user)
 
 (defpackage #:com.google.base-system
-  (:documentation "ASDF system definition for package COM.GOOGLE.BASE.")
+  (:documentation "System definition for package COM.GOOGLE.BASE.")
   (:use #:common-lisp #:asdf))
 
 (in-package #:com.google.base-system)
 
 (defsystem #:com.google.base
+  :name "Lisp base"
+  :description "Universally useful Lisp code."
+  :long-description "Code that should be useful for any Lisp application."
+  :version "1.0"
+  :author "Robert Brown"
+  :license "New BSD license.  See the copyright messages in individual files."
   :depends-on (#-(or allegro ccl clisp sbcl) :trivial-utf-8)
   :components
   ((:file "package")

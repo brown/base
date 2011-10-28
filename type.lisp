@@ -35,8 +35,13 @@
 
 ;;; Lisp integer types with the same numeric range as C++ ints.
 
+(deftype int8 () "A signed 8-bit integer." '(signed-byte 8))
+(deftype int16 () "A signed 16-bit integer." '(signed-byte 16))
 (deftype int32 () "A signed 32-bit integer." '(signed-byte 32))
 (deftype int64 () "A signed 64-bit integer." '(signed-byte 64))
+
+(deftype uint8 () "An unsigned 8-bit integer." '(unsigned-byte 8))
+(deftype uint16 () "An unsigned 16-bit integer." '(unsigned-byte 16))
 (deftype uint32 () "An unsigned 32-bit integer." '(unsigned-byte 32))
 (deftype uint64 () "An unsigned 64-bit integer." '(unsigned-byte 64))
 

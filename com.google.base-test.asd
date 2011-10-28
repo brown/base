@@ -28,22 +28,18 @@
 
 ;;;; Author: brown@google.com (Robert Brown)
 
-;;;; Define DEFCONST, a more convenient version of DEFCONSTANT.
+(in-package #:common-lisp-user)
 
-(in-package #:com.google.base)
-(declaim #.*optimize-default*)
+(defpackage #:com.google.base-test-system
+  (:documentation "System definition for testing the COM.GOOGLE.BASE package.")
+  (:use #:common-lisp #:asdf))
 
-(defmacro defconst (name value &optional (documentation nil documentation-present-p))
-  "Identical to CL:DEFCONSTANT except that the global constant variable NAME
-is bound to VALUE at compile time so it can be used in #. reader forms.
-Additionally, if the DEFCONST form is evaluated a second time, the constant
-is not rebound if the new value is EQUALP to the old.  CL:DEFCONSTANT
-requires that the two values be EQL to avoid undefined behavior."
-  (let ((temp (gensym))
-        (documentation (when documentation-present-p (list documentation))))
-    `(eval-when (:compile-toplevel :load-toplevel :execute)
-       (let ((,temp ,value))
-         (if  (and (boundp ',name) (equalp (symbol-value ',name) ,temp))
-              ;; Return the same result as DEFCONSTANT.
-              ',name
-              (defconstant ,name ,temp ,@documentation))))))
+(in-package #:com.google.base-test-system)
+
+(defsystem com.google.base-test
+  :depends-on (com.google.base hu.dwim.stefil)
+  :components
+  ((:file "base_test")))
+
+(defmethod perform ((operation test-op) (component (eql (find-system 'com.google.base-test))))
+  (funcall (read-from-string "com.google.base-test:test-base")))

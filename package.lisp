@@ -35,8 +35,6 @@
 useful, since most packages import BASE symbols by including (:USE #:COM.GOOGLE.BASE) in their
 DEFPACKAGE form.")
   (:use #:common-lisp)
-  ;; defconst.lisp
-  (:export #:defconst)
   ;; error.lisp
   (:export #:missing-argument)
   ;; octet.lisp
@@ -51,9 +49,16 @@ DEFPACKAGE form.")
   ;; sequence.lisp
   (:export #:prefixp
            #:suffixp)
+  ;; syntax.lisp
+  (:export #:defconst
+           #:define-print-object)
   ;; type.lisp
-  (:export #:int32
+  (:export #:int8
+           #:int16
+           #:int32
            #:int64
+           #:uint8
+           #:uint16
            #:uint32
            #:uint64
            #:+maximum-vector-index+

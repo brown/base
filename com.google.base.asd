@@ -44,11 +44,12 @@
   :author "Robert Brown"
   :license "New BSD license.  See the copyright messages in individual files."
   :depends-on (#-(or allegro ccl clisp sbcl) :trivial-utf-8)
+  :in-order-to ((test-op (test-op com.google.base-test)))
   :components
   ((:file "package")
    (:file "optimize" :depends-on ("package"))
-   (:file "defconst" :depends-on ("package" "optimize"))
+   (:file "syntax" :depends-on ("package" "optimize"))
    (:file "error" :depends-on ("package" "optimize"))
-   (:file "type" :depends-on ("package" "optimize" "defconst"))
+   (:file "type" :depends-on ("package" "optimize" "syntax"))
    (:file "octet" :depends-on ("package" "optimize" "type"))
    (:file "sequence" :depends-on ("package" "optimize"))))

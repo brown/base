@@ -91,11 +91,11 @@ creates a PRINT-OBJECT function similar to:
                  collect `',initarg
                  collect `(,accessor ,object)))
          (format-accessors
-          (loop for (accessor initarg format) in accessor-info
+           (loop for (accessor nil format) in accessor-info
                 when format collect `(,accessor ,object)))
          (format-string
            (with-output-to-string (s)
-             (loop for (accessor initarg format) in accessor-info do
+             (loop for (nil nil format) in accessor-info do
                (when format (format s "~A " format))))))
     `(defmethod print-object ((,object ,class-name) ,stream)
        (if *print-readably*

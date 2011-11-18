@@ -4,9 +4,9 @@ Universally useful Lisp code that lives in package com.google.base.
 The intent is that the base package only contains code that's highly likely to
 be useful in every Lisp application.  Currently it contains:
 
-    a nicer version of defconstant
+    a nicer version of DEFCONSTANT
     a macro for generating simple PRINT-OBJECT methods
-    a MISSING-ARGUMENT function for use in defclass forms
+    a MISSING-ARGUMENT function for use in DEFCLASS forms
     functions for manipulating utf-8 strings stored as vectors of 8-bit octets
     common compiler optimization settings
     functions for extracting the prefix or suffix of a sequence

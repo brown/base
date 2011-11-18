@@ -47,28 +47,30 @@
 
 (in-suite test-base)
 
-(defclass point ()
-  ((x :reader x :initarg :x)
-   (y :reader y :initarg :y)
-   (hidden :reader hidden :initarg hidden)))
+(defclass foo ()
+  ((x :reader x :initarg :x :type integer)
+   (y :reader y :initarg y :type symbol)
+   (hidden :reader hidden :initarg :hidden :type integer)))
 
-(define-print-object point ((x :x "x is ~D") (y :y "y is ~D") (hidden 'hidden)))
+(define-print-object foo ((x :x "x is ~D") (y 'y "y is ~S") (hidden :hidden)))
 
-(defun point-equal (point1 point2)
-  (and (= (x point1) (x point2))
-       (= (y point1) (y point2))
-       (= (hidden point1) (hidden point2))))
+(defun foo-equal (foo1 foo2)
+  (and (= (x foo1) (x foo2))
+       (eq (y foo1) (y foo2))
+       (= (hidden foo1) (hidden foo2))))
 
 (deftest define-print-object-print-read-consistency ()
-  (let* ((point1 (make-instance 'point :x 100 :y 200 'hidden 300))
-         (point2 (with-standard-io-syntax (read-from-string (write-to-string point1)))))
-    (is (point-equal point1 point2))))
+  (let* ((foo1 (make-instance 'foo :x 100 'y 'hello :hidden 300))
+         (foo2 (with-standard-io-syntax (read-from-string (write-to-string foo1)))))
+    (is (foo-equal foo1 foo2))))
 
 (deftest define-print-object-unreadable-printing ()
-  (let* ((point (make-instance 'point :x 11 :y 22 'hidden 123456789))
-         (output (with-standard-io-syntax (write-to-string point :readably nil))))
+  (let* ((foo (make-instance 'foo :x 11 'y 'world :hidden 123456789))
+         (output (with-standard-io-syntax
+                   (let ((*package* (find-package :com.google.base-test)))
+                     (write-to-string foo :readably nil)))))
     (is (search "x is 11" output))
-    (is (search "y is 22" output))
+    (is (search "y is WORLD" output))
     (is (null (search "123456789" output)))))
 
 (defun tree-search (x tree)

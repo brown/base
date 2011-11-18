@@ -89,7 +89,7 @@ creates a PRINT-OBJECT function similar to:
          (initargs
            (loop for (accessor initarg) in accessor-info
                  collect `',initarg
-                 collect `(,accessor ,object)))
+                 collect ``',(,accessor ,object)))
          (format-accessors
            (loop for (accessor nil format) in accessor-info
                 when format collect `(,accessor ,object)))

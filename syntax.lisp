@@ -92,7 +92,7 @@ creates a PRINT-OBJECT function similar to:
                  collect ``',(,accessor ,object)))
          (format-accessors
            (loop for (accessor nil format) in accessor-info
-                when format collect `(,accessor ,object)))
+                 when format collect `(,accessor ,object)))
          (format-string
            (with-output-to-string (s)
              (loop for (nil nil format) in accessor-info do

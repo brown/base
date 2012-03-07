@@ -37,12 +37,12 @@
 
 (defparameter *optimize-default*
   '(optimize (compilation-speed 0) (debug 3) (safety 3) (space 1) (speed 1))
-  "Compiler optimization settings that emphasize debugging over speed.  Most code should use these
-settings.")
+  "Compiler optimization settings that emphasize debugging over speed.  Most
+code should use these settings.")
 
 (defparameter *optimize-fast-unsafe*
   ;; Use the default debugging level.
   '(optimize (compilation-speed 0) (debug 2) (safety 0) (space 1) (speed 3))
-  "Compiler optimization settings that emphasize speed at the expense of debugging and run-time
-safety.  Only low-level performance sensitive code that has been extensively tested should use
-these settings.")
+  "Compiler optimization settings that emphasize speed at the expense of
+debugging and run-time safety.  Only low-level performance sensitive code that
+has been extensively tested should use these settings.")

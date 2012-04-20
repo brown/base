@@ -31,9 +31,10 @@
 (in-package #:common-lisp-user)
 
 (defpackage #:com.google.base
-  (:documentation "Basic code used by all applications. The code in BASE should be universally
-useful, since most packages import BASE symbols by including (:USE #:COM.GOOGLE.BASE) in their
-DEFPACKAGE form.")
+  (:documentation
+   "Basic code used by all applications. The code in BASE should be universally
+useful, since most packages will import BASE symbols by including
+(:USE #:COM.GOOGLE.BASE) in their DEFPACKAGE form.")
   (:use #:common-lisp)
   ;; error.lisp
   (:export #:missing-argument)

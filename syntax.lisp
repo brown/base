@@ -34,10 +34,11 @@
 (declaim #.*optimize-default*)
 
 (defmacro defconst (name value &optional (documentation nil documentation-present-p))
-  "Identical to CL:DEFCONSTANT except that the global constant variable NAME is bound to
-VALUE at compile time so it can be used in #. reader forms.  Additionally, if the DEFCONST
-form is evaluated a second time, the constant is not rebound if the new value is EQUALP to
-the old.  CL:DEFCONSTANT requires that the two values be EQL to avoid undefined behavior."
+  "Identical to CL:DEFCONSTANT except that the global constant variable NAME is
+bound to VALUE at compile time so it can be used in #. reader forms.
+Additionally, if the DEFCONST form is evaluated a second time, the constant is
+not rebound if the new value is EQUALP to the old.  CL:DEFCONSTANT requires that
+the two values be EQL to avoid undefined behavior."
   (unless (symbolp name) (error "~S is not a symbol" name))
   (when (and documentation-present-p (not (stringp documentation)))
     (error "~S is not a documentation string" documentation))
@@ -51,26 +52,33 @@ the old.  CL:DEFCONSTANT requires that the two values be EQL to avoid undefined 
               (defconstant ,name ,temp ,@documentation))))))
 
 (defmacro define-print-object (class-name accessor-info)
-  "Generates a CL:PRINT-OBJECT generic function for class CLASS-NAME using ACCESSOR-INFO,
-a list containing elements of the form: (accessor initarg [format-string]).  If a
-format-string is not provided for a slot, then the generated PRINT-OBJECT function will
-output nothing for that slot when *PRINT-READABLY* is false.
+  "Generates a CL:PRINT-OBJECT generic function for class CLASS-NAME using
+ACCESSOR-INFO, a list containing elements of the form
+(accessor initarg [format-string]).
 
-Suppose there is a POINT class with slots X, Y, and HIDDEN.  The following
+If a format-string is not provided for a slot, then the generated PRINT-OBJECT
+function outputs nothing for that slot when *PRINT-READABLY* is false.
+
+Given a POINT class with slots X, Y, and HIDDEN.  The following
 DEFINE-PRINT-OBJECT form:
 
-  (define-print-object point ((x :x \"x is ~D\") (y :y \"y is ~D\") (hidden :hidden)))
+  (define-print-object point
+    ((x :x \"x is ~D\")
+     (y :y \"y is ~D\")
+     (hidden :hidden)))
 
-creates a PRINT-OBJECT function similar to:
+expands to a PRINT-OBJECT function similar to:
 
-    (defmethod print-object ((point point) stream)
-      (if *print-readably*
-        (progn (write-string \"#.\" stream)
-               (write `(make-instance 'point :x ,(x point) :y ,(y point)
-                                      :hidden ,(hidden point))
-                      :stream stream))
-        (print-unreadable-object (point stream :type t :identity t)
-          (format stream \"x is ~D y is ~D\" (x point) (y point)))))"
+  (defmethod print-object ((point point) stream)
+    (if *print-readably*
+      (progn (write-string \"#.\" stream)
+             (write `(make-instance 'point
+                                    :x ,(x point)
+                                    :y ,(y point)
+                                    :hidden ,(hidden point))
+                    :stream stream))
+      (print-unreadable-object (point stream :type t :identity t)
+        (format stream \"x is ~D y is ~D\" (x point) (y point)))))"
   (dolist (info accessor-info)
     (destructuring-bind (accessor initarg &optional format &rest rest)
         info

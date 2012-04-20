@@ -38,8 +38,8 @@
 (declaim (ftype (function () nil) missing-argument))
 
 (defun missing-argument ()
-  "Signal an error indicating that an &OPTIONAL or &KEY argument is missing.  Use
-(MISSING-ARGUMENT) as the default value of required &KEY function arguments and as the initform in
-DEFCLASS and DEFSTRUCT slot definition forms when the slot's initform must always be supplied to
-MAKE-INSTANCE."
+  "Signal an error indicating that an &OPTIONAL or &KEY argument is missing.
+Use (MISSING-ARGUMENT) as the default value of required &KEY function arguments
+and as the initform in DEFCLASS and DEFSTRUCT slot definition forms when the
+slot's initform must always be supplied to MAKE-INSTANCE."
   (error "A required &KEY or &OPTIONAL argument was not supplied."))

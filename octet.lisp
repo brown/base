@@ -34,7 +34,7 @@
 (declaim #.*optimize-fast-unsafe*)
 
 (deftype octet () '(unsigned-byte 8))
-(deftype octet-vector () '(simple-array octet (*)))
+(deftype octet-vector (&optional length) `(simple-array octet (,length)))
 
 (declaim (ftype (function (fixnum &key (:initial-contents list)) (values octet-vector &optional))
                 make-octet-vector))

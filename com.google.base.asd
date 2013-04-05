@@ -40,7 +40,7 @@
   :name "Lisp base"
   :description "Universally useful Lisp code."
   :long-description "Code that should be useful for any Lisp application."
-  :version "1.1"
+  :version "1.2"
   :author "Robert Brown"
   :license "New BSD license.  See the copyright messages in individual files."
   :depends-on (#-(or allegro ccl clisp sbcl) trivial-utf-8)

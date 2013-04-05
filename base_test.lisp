@@ -47,6 +47,8 @@
 
 (in-suite test-base)
 
+;;; syntax tests
+
 (defclass foo ()
   ((x :reader x :initarg :x :type integer)
    (y :reader y :initarg y :type symbol)
@@ -91,3 +93,11 @@
     (signals-error '(define-print-object foobar ((z initarg zebras))))
     (signals-error '(define-print-object foobar ((z))))
     (signals-error '(define-print-object foobar ((z :z "~D zebras" junk))))))
+
+;;; octet tests
+
+(deftest octet-types ()
+  (let ((octets (make-octet-vector 10)))
+    (is (typep octets 'octet-vector))
+    (is (typep octets '(octet-vector 10)))
+    (is (typep (aref octets 5) 'octet))))

@@ -28,14 +28,6 @@
 
 ;;;; Author: brown@google.com (Robert Brown)
 
-(in-package #:common-lisp-user)
-
-(defpackage #:com.google.base-test-system
-  (:documentation "System definition for testing the COM.GOOGLE.BASE package.")
-  (:use #:common-lisp #:asdf))
-
-(in-package #:com.google.base-test-system)
-
 (defsystem com.google.base-test
   :depends-on (com.google.base hu.dwim.stefil)
   :components

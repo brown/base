@@ -28,14 +28,6 @@
 
 ;;;; Author: brown@google.com (Robert Brown)
 
-(in-package #:common-lisp-user)
-
-(defpackage #:com.google.base-system
-  (:documentation "System definition for package COM.GOOGLE.BASE.")
-  (:use #:common-lisp #:asdf))
-
-(in-package #:com.google.base-system)
-
 (defsystem com.google.base
   :name "Lisp base"
   :description "Universally useful Lisp code."

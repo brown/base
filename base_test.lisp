@@ -40,7 +40,6 @@
   (:export #:test-base))
 
 (in-package #:com.google.base-test)
-(declaim #.*optimize-default*)
 
 (defsuite (test-base :in root-suite) ()
   (run-child-tests))

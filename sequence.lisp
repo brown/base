@@ -31,7 +31,6 @@
 ;;;; Functions on sequences.
 
 (in-package #:com.google.base)
-(declaim #.*optimize-default*)
 
 (defun prefixp (prefix sequence &key (test #'eql))
   "Does PREFIX match a prefix of SEQUENCE?"

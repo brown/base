@@ -31,7 +31,6 @@
 ;;;; Vectors of octets, 8-bit bytes, used to store UTF-8 encoded strings.
 
 (in-package #:com.google.base)
-(declaim #.*optimize-fast-unsafe*)
 
 (deftype octet () '(unsigned-byte 8))
 (deftype octet-vector (&optional length) `(simple-array octet (,length)))

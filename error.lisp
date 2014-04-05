@@ -31,7 +31,6 @@
 ;;;; Error generation for missing arguments.
 
 (in-package #:com.google.base)
-(declaim #.*optimize-default*)
 
 ;; Tell the compiler that MISSING-ARGUMENT never returns in order to avoid compile-time type
 ;; warnings for object slots with declared types.

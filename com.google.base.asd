@@ -1,4 +1,4 @@
-;;;; Copyright 2011 Google Inc.  All Rights Reserved
+;;;; Copyright 2014 Google Inc.  All Rights Reserved
 
 ;;;; Redistribution and use in source and binary forms, with or without
 ;;;; modification, are permitted provided that the following conditions are
@@ -28,11 +28,69 @@
 
 ;;;; Author: brown@google.com (Robert Brown)
 
+(defclass fast-unsafe-source-file (cl-source-file)
+  ()
+  (:documentation
+"A Common Lisp source file that is compiled with high optimization settings."))
+
+(defun call-thunk-with-policy (thunk policy)
+  #+abcl
+  (let ((system::*debug* system::*debug*)
+        (system::*safety* system::*safety*)
+        (system::*space* system::*space*)
+        (system::*speed* system::*speed*))
+    (proclaim policy)
+    (funcall thunk))
+  #+clisp
+  (let ((previous-policy
+          (loop for key being the hash-keys of system::*optimize* using (hash-value value)
+                collect (cons key value))))
+    (proclaim policy)
+    (funcall thunk)
+    (clrhash system::*optimize*)
+    (loop for (key . value) in previous-policy
+          do (setf (gethash key system::*optimize*) value)))
+  #+clozure
+  (let ((ccl::*nx-cspeed* ccl::*nx-cspeed*)
+        (ccl::*nx-debug* ccl::*nx-debug*)
+        (ccl::*nx-safety* ccl::*nx-safety*)
+        (ccl::*nx-space* ccl::*nx-space*)
+        (ccl::*nx-speed* ccl::*nx-speed*))
+    (proclaim policy)
+    (funcall thunk))
+  #+(or cmucl scl)
+  (let ((c::*default-cookie* c::*default-cookie*))
+    (proclaim policy)
+    (funcall thunk))
+  #+ecl
+  (let ((c::*debug* c::*debug*)
+        (c::*safety* c::*safety*)
+        (c::*space* c::*space*)
+        (c::*speed* c::*speed*))
+    (proclaim policy)
+    (funcall thunk))
+  #+sbcl
+  (let ((sb-c::*policy* sb-c::*policy*))
+    (proclaim policy)
+    (funcall thunk))
+  #-(or abcl clisp clozure cmucl ecl sbcl scl)
+  (progn
+    (warn "unable to safely change compiler optimization policy")
+    (funcall thunk)))
+
+(defmethod perform :around ((operation compile-op) (component fast-unsafe-source-file))
+  (let ((policy (symbol-value (read-from-string "com.google.base:*optimize-fast-unsafe*"))))
+    (call-thunk-with-policy (lambda () (call-next-method)) policy)))
+
+(defmethod perform :around ((operation load-op) (component fast-unsafe-source-file))
+  (let ((policy (symbol-value (read-from-string "com.google.base:*optimize-fast-unsafe*"))))
+    (call-thunk-with-policy (lambda () (call-next-method)) policy)))
+
 (defsystem com.google.base
   :name "Lisp base"
   :description "Universally useful Lisp code."
   :long-description "Code that should be useful for any Lisp application."
-  :version "1.2"
+  :version "1.3"
   :author "Robert Brown"
   :license "New BSD license.  See the copyright messages in individual files."
   :depends-on (#-(or allegro ccl clisp sbcl) trivial-utf-8)
@@ -43,5 +101,5 @@
    (:file "syntax" :depends-on ("package" "optimize"))
    (:file "error" :depends-on ("package" "optimize"))
    (:file "type" :depends-on ("package" "optimize" "syntax"))
-   (:file "octet" :depends-on ("package" "optimize" "type"))
+   (:fast-unsafe-source-file "octet" :depends-on ("package" "optimize" "type"))
    (:file "sequence" :depends-on ("package" "optimize"))))

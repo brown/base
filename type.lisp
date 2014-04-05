@@ -31,7 +31,6 @@
 ;;;; Constants and types that are very commonly used.
 
 (in-package #:com.google.base)
-(declaim #.*optimize-default*)
 
 ;;; Lisp integer types with the same numeric range as C++ ints.
 

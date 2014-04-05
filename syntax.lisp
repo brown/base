@@ -31,7 +31,6 @@
 ;;;; Commonly used macros.
 
 (in-package #:com.google.base)
-(declaim #.*optimize-default*)
 
 (defmacro defconst (name value &optional (documentation nil documentation-present-p))
   "Identical to CL:DEFCONSTANT except that the global constant variable NAME is

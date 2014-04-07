@@ -45,11 +45,12 @@
   (let ((previous-policy
           (loop for key being the hash-keys of system::*optimize* using (hash-value value)
                 collect (cons key value))))
-    (proclaim policy)
-    (funcall thunk)
-    (clrhash system::*optimize*)
-    (loop for (key . value) in previous-policy
-          do (setf (gethash key system::*optimize*) value)))
+    (unwind-protect
+         (progn (proclaim policy)
+                (funcall thunk))
+      (clrhash system::*optimize*)
+      (loop for (key . value) in previous-policy
+            do (setf (gethash key system::*optimize*) value))))
   #+clozure
   (let ((ccl::*nx-cspeed* ccl::*nx-cspeed*)
         (ccl::*nx-debug* ccl::*nx-debug*)
@@ -80,11 +81,11 @@
 
 (defmethod perform :around ((operation compile-op) (component fast-unsafe-source-file))
   (let ((policy (symbol-value (read-from-string "com.google.base:*optimize-fast-unsafe*"))))
-    (call-thunk-with-policy (lambda () (call-next-method)) policy)))
+    (call-thunk-with-policy #'call-next-method policy)))
 
 (defmethod perform :around ((operation load-op) (component fast-unsafe-source-file))
   (let ((policy (symbol-value (read-from-string "com.google.base:*optimize-fast-unsafe*"))))
-    (call-thunk-with-policy (lambda () (call-next-method)) policy)))
+    (call-thunk-with-policy #'call-next-method policy)))
 
 (defsystem com.google.base
   :name "Lisp base"

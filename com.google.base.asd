@@ -33,7 +33,7 @@
   (:documentation
 "A Common Lisp source file that is compiled with high optimization settings."))
 
-(defun call-thunk-with-policy (thunk policy)
+(defun call-with-compiler-policy (thunk policy)
   #+abcl
   (let ((system::*debug* system::*debug*)
         (system::*safety* system::*safety*)
@@ -81,11 +81,11 @@
 
 (defmethod perform :around ((operation compile-op) (component fast-unsafe-source-file))
   (let ((policy (symbol-value (read-from-string "com.google.base:*optimize-fast-unsafe*"))))
-    (call-thunk-with-policy #'call-next-method policy)))
+    (call-with-compiler-policy #'call-next-method policy)))
 
 (defmethod perform :around ((operation load-op) (component fast-unsafe-source-file))
   (let ((policy (symbol-value (read-from-string "com.google.base:*optimize-fast-unsafe*"))))
-    (call-thunk-with-policy #'call-next-method policy)))
+    (call-with-compiler-policy #'call-next-method policy)))
 
 (defsystem com.google.base
   :name "Lisp base"

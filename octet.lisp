@@ -63,7 +63,7 @@ the vector is initialized to the contents of list INITIAL-CONTENTS."
   #+clisp
   (ext:convert-string-to-bytes string charset:utf-8 :start start :end end)
   #+sbcl
-  (sb-ext:string-to-octets string :start start :end end)
+  (sb-ext:string-to-octets string :start start :end end :external-format :utf-8)
   #-(or allegro ccl clisp sbcl)
   (trivial-utf-8:string-to-utf-8-bytes (subseq string start end)))
 

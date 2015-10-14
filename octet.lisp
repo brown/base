@@ -35,6 +35,9 @@
 (deftype octet () '(unsigned-byte 8))
 (deftype octet-vector (&optional length) `(simple-array octet (,length)))
 
+(defun octet-vector (&rest octets)
+  (coerce octets 'octet-vector))
+
 (declaim (ftype (function (fixnum &key (:initial-contents list)) (values octet-vector &optional))
                 make-octet-vector))
 

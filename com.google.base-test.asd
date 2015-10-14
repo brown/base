@@ -29,6 +29,11 @@
 ;;;; Author: brown@google.com (Robert Brown)
 
 (defsystem com.google.base-test
+  :name "Lisp base test"
+  :description "Test code for package COM.GOOGLE.BASE."
+  :version "1.4"
+  :author "Robert Brown"
+  :license "New BSD license.  See the copyright messages in individual files."
   :depends-on (com.google.base hu.dwim.stefil)
   :components
   ((:file "base_test")))

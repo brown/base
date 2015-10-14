@@ -36,17 +36,18 @@
   "Identical to CL:DEFCONSTANT except that the global constant variable NAME is
 bound to VALUE at compile time so it can be used in #. reader forms.
 Additionally, if the DEFCONST form is evaluated a second time, the constant is
-not rebound if the new value is EQUALP to the old.  CL:DEFCONSTANT requires that
-the two values be EQL to avoid undefined behavior."
-  (unless (symbolp name) (error "~S is not a symbol" name))
-  (when (and documentation-present-p (not (stringp documentation)))
-    (error "~S is not a documentation string" documentation))
+not rebound if the new value is EQUALP to the old.  CL:DEFCONSTANT requires
+that the two values be EQL to avoid undefined behavior."
+  (assert (symbolp name)
+          (name) "constant name ~S is not a symbol" name)
+  (assert (or (not documentation-present-p) (stringp documentation))
+          (documentation) "documentation for constant ~S is not a string" name)
   (let ((temp (gensym))
         (documentation (when documentation-present-p (list documentation))))
     `(eval-when (:compile-toplevel :load-toplevel :execute)
        (let ((,temp ,value))
          (if  (and (boundp ',name) (equalp (symbol-value ',name) ,temp))
-              ;; Return the same result as DEFCONSTANT.
+              ;; Return the same result as CL:DEFCONSTANT.
               ',name
               (defconstant ,name ,temp ,@documentation))))))
 
@@ -81,16 +82,18 @@ expands to a PRINT-OBJECT function similar to:
   (dolist (info accessor-info)
     (destructuring-bind (accessor initarg &optional format &rest rest)
         info
-      (when rest (error "too many arguments"))
-      (unless (and accessor (symbolp accessor)) (error "~S is not an accessor" accessor))
+      (assert (null rest) () "too many arguments")
+      (assert (and accessor (symbolp accessor))
+              (accessor) "~S is not an accessor" accessor)
       ;; Allow keywords and quoted symbols as initargs.
-      (unless (or (keywordp initarg)
+      (assert (or (keywordp initarg)
                   (and (listp initarg)
                        (= (length initarg) 2)
                        (eq (first initarg) 'quote)
                        (and (symbolp (second initarg)))))
-        (error "initarg ~S is not a keyword or quoted symbol" initarg))
-      (when (and format (not (stringp format))) (error "~S is not a format string" format))))
+              (initarg) "initarg ~S is not a keyword or quoted symbol" initarg)
+      (assert (or (not format) (stringp format))
+              (format) "~S is not a format string" format)))
   (let* ((object (gensym))
          (stream (gensym))
          (initargs

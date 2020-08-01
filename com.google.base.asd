@@ -26,7 +26,7 @@
 ;;;; (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ;;;; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-;;;; Author: brown@google.com (Robert Brown)
+;;;; Author: Robert Brown <robert.brown@gmail.com>
 
 (defclass fast-unsafe-source-file (cl-source-file)
   ()
@@ -92,10 +92,10 @@
   :description "Universally useful Lisp code."
   :long-description "Code that should be useful for any Lisp application."
   :version "1.4"
-  :author "Robert Brown"
+  :author "Robert Brown <robert.brown@gmail.com>"
   :license "New BSD license.  See the copyright messages in individual files."
   :depends-on (#-(or allegro ccl clisp sbcl) trivial-utf-8)
-  :in-order-to ((test-op (test-op com.google.base-test)))
+  :in-order-to ((test-op (test-op com.google.base/test)))
   :components
   ((:file "package")
    (:file "optimize" :depends-on ("package"))
@@ -104,3 +104,16 @@
    (:file "type" :depends-on ("package" "optimize" "syntax"))
    (:fast-unsafe-source-file "octet" :depends-on ("package" "optimize" "type"))
    (:file "sequence" :depends-on ("package" "optimize"))))
+
+(defsystem com.google.base/test
+  :name "Lisp base test"
+  :description "Test code for package COM.GOOGLE.BASE."
+  :version "1.4"
+  :author "Robert Brown <robert.brown@gmail.com>"
+  :license "New BSD license.  See the copyright messages in individual files."
+  :depends-on (com.google.base hu.dwim.stefil)
+  :components
+  ((:file "base-test")))
+
+(defmethod perform ((operation test-op) (component (eql (find-system 'com.google.base/test))))
+  (symbol-call 'com.google.base-test 'test-base))
